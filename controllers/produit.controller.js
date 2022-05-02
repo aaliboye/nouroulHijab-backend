@@ -43,7 +43,7 @@ module.exports = {
     }),
 
     updateProduit: ((req, res, next)=>{
-
+        
     }),
 
     addStock: ((req, res, next)=>{
@@ -64,6 +64,7 @@ module.exports = {
             res.status(400).json({err: err})
         })
     }),
+
 
     deleteProduit: ((req, res, next)=>{
 
