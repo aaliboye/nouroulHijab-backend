@@ -23,23 +23,24 @@ module.exports = {
                     })
                     newsuer.save()
                     .then(()=>{
-                        res.status(201).json({status: "success" ,message: "user saved"})
+                        res.status(201).json({success: true, message: "user saved"})
                     })
                 })
                 .catch((err)=>{
                     res.status(400).json({
-                        err: err
+                        success: false,
+                        message: err
                     })
                 })
             }
 
             else{
-                return res.status(400).json({status: "echec", err: "utilisateur existe deja"})
+                return res.status(400).json({success: false, err: "utilisateur existe deja"})
             }
         })
 
         .catch((err)=>{
-            res.status(400).json({status: 'echec', err: err})
+            res.status(400).json({success: false, message: err})
         })
 
        
@@ -50,29 +51,34 @@ module.exports = {
         User.findOne({ telephone: req.body.telephone })
           .then(user => {
             if (!user) {
-              return res.status(401).json({status: 'echec' ,err: 'Utilisateur non trouvé !' });
+              res.status(400).json({success: false ,message: 'Utilisateur non trouvé !' });
             }
-            bcrypt.compare(req.body.password, user.password)
-              .then(valid => {
-                if (!valid) {
-                  return res.status(401).json({status: 'echec' ,err: 'Mot de passe incorrect !' });
-                }
-                var token =  jwt.sign(
-                  {...{ userId: user._id }, expiresIn: 24*60*60}, 
-                  "ASANEALIKEY"
-                );
-                console.log(token)
-                res.status(200).json({
-                  
-                  userId: user._id,
-                  token: token
-                });
-              })
-              .catch(error => {
-                console.log(error)
-                res.status(500).json({status:"echec", err: err });
-              })
+            else{
+              bcrypt.compare(req.body.password, user.password)
+                .then(valid => {
+                  if (!valid) {
+                    res.status(400).json({success: false ,message: 'Mot de passe incorrect !' });
+                  }
+                  else{
+
+                    var token =  jwt.sign(
+                      {...{ userId: user._id }, expiresIn: 24*60*60}, 
+                      "ASSANEALIKEY"
+                      );
+                      console.log(token)
+                      res.status(200).json({
+                        
+                        userId: user._id,
+                        token: token
+                      });
+                    }
+                })
+                .catch(error => {
+                  console.log(err)
+                  res.status(500).json({success: false, message: err });
+                })
+            }
           })
-          .catch(error => res.status(500).json({ error }));
+          .catch(err => res.status(400).json({success: true, message: err }));
     })
 }
