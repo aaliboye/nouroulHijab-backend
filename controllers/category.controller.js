@@ -1,3 +1,4 @@
+const { log } = require('debug/src/browser');
 const Category = require('../model/category.model');
 const jwt = require('jsonwebtoken')
 
@@ -6,10 +7,15 @@ module.exports = {
     addCategory: ((req, res, next)=>{
         delete req.body._id;
 
+        console.log(req.body);
+
         const token = req.headers.authorization.split(' ')[1];
-        const decodedToken = jwt.verify(token, 'ASANEALIKEY');
+        const decodedToken = jwt.verify(token, 'ASSANEALIKEY');
+        console.log(token);
+        console.log(decodedToken);
         const userId = decodedToken.userId;
 
+        console.log(userId);
 
         var cat = new Category({
             name: req.body.name,

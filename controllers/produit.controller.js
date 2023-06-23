@@ -24,7 +24,7 @@ module.exports = {
 
     listProduitsByCategory: ((req, res, next)=>{
         var idCategory = req.params.idCategory;
-        Produit.find({categoryId: idCategory})
+        Produit.find({categoryName: idCategory})
         .then((produits)=>{
             res.status(200).json(produits)
         })
@@ -152,6 +152,7 @@ module.exports = {
     }),
 
     addStock: ((req, res, next)=>{
+        console.log(req.body);
         var id = req.params.idProduit;
         var stock = req.body.stock
         Produit.findOne({_id: id})
@@ -159,14 +160,14 @@ module.exports = {
             var newstock = produit.stock + stock;
             Produit.updateOne({_id: id}, {stock: newstock})
             .then(()=>{
-                res.status(200).json({success: true, message: 'stock added'})
+                return res.status(200).json({success: true, message: 'stock added'})
             })
             .catch((err)=>{
-                res.status(400).json({success: true, message: err})
+                return res.status(400).json({success: false, message: err})
             })
         })
         .catch((err)=>{
-            res.status(400).json({success: true, message: err})
+            return res.status(400).json({success: false, message: err})
         })
     }),
 
@@ -184,7 +185,7 @@ module.exports = {
         var productName = req.body.productName;
         var qte = req.body.quantite;
         var type = req.body.type;
-        var prix = 0;   
+        var prix = req.body.prix;   
         var userName = ''
         var categoryName = ''
         const token = req.headers.authorization.split(' ')[1];
@@ -205,24 +206,26 @@ module.exports = {
     
         Produit.findOne({name: productName})
         .then((produit)=>{
-            if(type=="gros"){
-                prix = produit.prixGros
-            }
-            else{
-                prix = produit.prixUnit
-            }
+            // if(type=="gros"){
+            //     prix = produit.prixGros
+            // }
+            // else{
+            //     prix = produit.prixUnit
+            // }
             if(qte <= produit.stock){
                 var newstock = produit.stock - qte;
                 var ticket = new Ticket({
                     productName: productName,
                     type: type,
                     quantite: qte,
-                    prixTotal: qte * prix,
+                    prixTotal: prix,
                     userName: userName,
                     userId: userId,
-                    categoryName: categoryName
+                    categoryName: categoryName,
+                    status: "Vendu"
                     
                 })
+                console.log(ticket);
                 ticket.save().then(()=>{
                     Produit.updateOne({name: productName}, {stock: newstock, _id: produit._id})
                     .then(()=>{
@@ -236,6 +239,7 @@ module.exports = {
                     })
                 })
                 .catch((err)=>{
+                    console.log(err);
                    res.status(400).json({
                     success: false,
                        err: err
@@ -246,6 +250,7 @@ module.exports = {
             }
 
             else{
+
                 res.status(200).json({success: false, message: "la quantité est inuffisant"})
             }
 

@@ -5,11 +5,19 @@ module.exports = (req, res, next) => {
       const token = req.headers.authorization.split(' ')[1];
       const decodedToken = jwt.verify(token, 'ASSANEALIKEY');
       const userId = decodedToken.userId;
+      const timeExp = decodedToken.expiresIn;
+
+      console.log(timeExp);
   
-      if (req.body.userId && req.body.userId !== userId) {
+      if (req.body.userId && req.body.userId !== userId ) {
         console.log("invalid user");
-       
-      } else {
+       return res.status(401).json({message: 'invalid user'})
+      } 
+      else if(decodedToken.exp){
+        return res.status(401).json({message: 'Token Expiré'})
+
+      }
+      else {
         next();
       }
     } catch(err) {

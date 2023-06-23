@@ -30,10 +30,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-mongoose.connect('mongodb://localhost:27017/nouroulHijab').then(()=>{
+mongoose.set("strictQuery", false);
+
+mongoose.connect('mongodb://127.0.0.1:27017/nouroulHijab').then(()=>{
   console.log('connexion DB reussi');
 })
-.catch(()=>{
+.catch((err)=>{
+  console.log(err);
   console.log('connexion DB echoué');
 });
 
