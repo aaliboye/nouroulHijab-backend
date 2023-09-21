@@ -12,5 +12,8 @@ router.post('/set-password/:idUser', userCtrl.setPassword);
 
 router.get('/role-user', userCtrl.getUserRole);
 router.get('/list-users', userCtrl.listUser);
+router.get('/:idUser', userCtrl.getOneUser);
+router.get('/desactive/:idUser', userCtrl.desactiverUser);
+router.get('/active/:idUser', userCtrl.activerUser);
 
 module.exports = router;

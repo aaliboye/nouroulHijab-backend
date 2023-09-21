@@ -3,6 +3,7 @@ const router = express.Router();
 const produitCtrl = require('../controllers/produit.controller');
 const auth = require('../middlewares/auth');
 const ticketController = require('../controllers/ticket.controller');
+const upload = require('../middlewares/multer-config');
 
 
 router.get('/list-produit',auth, produitCtrl.listProduits);

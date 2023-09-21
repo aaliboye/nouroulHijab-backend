@@ -12,6 +12,7 @@ const userSchema = mongoose.Schema({
     password: {type: String, required: false},
     telephone: {type: String, required: true},
     numeroCNI: {type: String, required: false},
+    isFirstLogin: {type: Boolean, required: true, default: true},
     status: {type: String, required: true, default: 'desactive'}
 })
 

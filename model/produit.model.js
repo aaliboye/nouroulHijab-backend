@@ -16,6 +16,10 @@ const produitSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Category'
     },
+    image: {
+        data: Buffer,
+        contentType: String
+      },
     categoryName: {type: String}
 })
 

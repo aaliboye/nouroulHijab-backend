@@ -37,6 +37,8 @@ module.exports = {
     }),
 
     addProduit: ((req, res, next)=>{
+        // console.log(re.files[0].location);
+        // const imageUrl = req.file.path;
         delete req.body._id
 
         
@@ -47,6 +49,7 @@ module.exports = {
         const token = req.headers.authorization.split(' ')[1];
         const decodedToken = jwt.verify(token, 'ASSANEALIKEY');
         const userId = decodedToken.userId;
+
 
         Produit.findOne({name: req.body.name})
         .then((produit)=>{
@@ -65,7 +68,9 @@ module.exports = {
                         stock: req.body.stock,
                         userId: userId,
                         categoryId: req.body.categoryId,
-                        categoryName: this.categoryName
+                        categoryName: this.categoryName,
+                        // imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+                        
                      })
                      console.log(prod);
                      prod.save()
@@ -73,17 +78,19 @@ module.exports = {
                          res.status(200).json({success: true, message: 'vous avez ajouté un produit'})
                      })
                      .catch((err)=>{
+                        console.log(err);
                          res.status(400).json({success: false, message: err})
                      })
         
                 })
                 .catch((err)=>{
+                    console.log(err);
                     res.status(400).json({success: false,
                     message: err})
                 }) 
             }
             else{
-                res.status(400).json({success: false, message: "produit existe deja"})
+                res.json({success: false, message: "produit existe deja"})
             }
         })
 
@@ -92,59 +99,6 @@ module.exports = {
             message: err})
         })
 
-        // Category.findOne({_id: req.body.categoryId})
-        // .then((category)=>{
-        //     console.log(category);
-        //     this.categoryName = category.name
-            
-        //     console.log(this.categoryName);
-        //     var prod = new Produit({
-        //         name: req.body.name,
-        //         description: req.body.description,
-        //         prixUnit: req.body.prixUnit,
-        //         prixGros: req.body.prixGros,
-        //         stock: req.body.stock,
-        //         userId: userId,
-        //         categoryId: req.body.categoryId,
-        //         categoryName: this.categoryName
-        //      })
-        //      console.log(prod);
-        //      prod.save()
-        //      .then(()=>{
-        //          res.status(200).json({status:'success', message: 'vous avez ajouté un produit'})
-        //      })
-        //      .catch((err)=>{
-        //          res.status(400).json({status: 'ecec', err: err})
-        //      })
-
-        // })
-        // .catch((err)=>{
-        //     res.status(400).json(err)
-        // }) 
-
-        // User.findOne({_id: userId})
-        // .then((user)=>{
-        //     this.userName = user.firstname+' '+user.lastname
-        // })
-
-        // var prod = new Produit({
-        //    name: req.body.name,
-        //    description: req.body.description,
-        //    prixUnit: req.body.prixUnit,
-        //    prixGros: req.body.prixGros,
-        //    stock: req.body.stock,
-        //    userId: userId,
-        //    categoryId: req.body.categoryId,
-        //    categoryName: this.categoryName
-        // })
-        // console.log(prod);
-        // prod.save()
-        // .then(()=>{
-        //     res.status(200).json({status:'success', message: 'vous avez ajouté un produit'})
-        // })
-        // .catch((err)=>{
-        //     res.status(400).json({status: 'ecec', err: err})
-        // })
     }),
 
     updateProduit: ((req, res, next)=>{
@@ -181,6 +135,7 @@ module.exports = {
     }),
 
     vendreProduit: (req, res, next)=>{
+        
         
         var productName = req.body.productName;
         var qte = req.body.quantite;

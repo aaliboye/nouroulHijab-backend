@@ -8,7 +8,7 @@ module.exports = {
     
     signup: ((req, res, next)=>{
 
-        User.findOne({telephone: req.body.telephone})
+        User.findOne({email: req.body.email})
         .then((user)=>{
             if(!user)
             {
@@ -21,6 +21,7 @@ module.exports = {
                         username: req.body.username,
                         role: req.body.role,
                         telephone: req.body.telephone,
+                        email: req.body.email,
                         numeroCNI: req.body.numeroCNI
                     })
                     newsuer.save()
@@ -53,22 +54,42 @@ module.exports = {
       let user = new User({
         ...req.body
       })
-      console.log(user);
+      var pwd = genPwd(8);
+      var pwdHash = await bcrypt.hash(pwd, 10)
+      if(pwd){
+        user.password = pwdHash
+        console.log(user);
 
-      let saveUser = await user.save()
-
-      if(saveUser){
-        await mailer.sendMail("http://localhost:4200/#/set-password/"+saveUser._id, req.body.email, "aalitestdev@gmail.com",res)
-
-
-        // console.log(sendmail);
-        // if(sendmail){
-        //   return res.status(200).json({success: true, message: "mail envoyé"})
-        // }
-        // if(sendmail){
-        //   return res.status(400).json({success: false, message: "mail non envoyé"})
-        // }
+        try {
+          
+        let saveUser = await user.save()
+  
+        if(saveUser){
+          
+          await mailer.sendMail(`pwd: ${pwd}`, req.body.email, "aalitestdev@gmail.com",res)
+  
+          // console.log(sendmail);
+          // if(sendmail){
+          //   return res.status(200).json({success: true, message: "mail envoyé"})
+          // }
+          // if(sendmail){
+          //   return res.status(400).json({success: false, message: "mail non envoyé"})
+          // }
+        }
+        else{
+          return res.json({success: false, message: 'user not saved'})
+        }
+        } catch (error) {
+          return res.json({success: false, message: 'user not saved'})
+          
+        }
+  
       }
+      else{
+        return res.json({success: false, message: 'user not saved'})
+
+      }
+
     }),
 
 
@@ -84,6 +105,7 @@ module.exports = {
             .then(async(result) => {
               user.password = result;
               user.status = 'active'
+              user.isFirstLogin = false;
               user.save()
               .then((result) => {
                 console.log(result);
@@ -168,6 +190,37 @@ module.exports = {
       
     }),
 
+    desactiverUser: ((req, res, next)=>{
+      console.log(req.params.idUser);
+      User.updateOne({_id: req.params.idUser}, {status: 'desactive'})
+      .then((result) => {
+        return res.status(200).json({success: true, message: 'user desactivé'})
+      }).catch((err) => {
+        return res.json({success: true, message: 'user non desactivé'})
+        
+      });
+    }),
+    
+    activerUser: ((req, res, next)=>{
+      console.log(req.params.idUser);
+      User.updateOne({_id: req.params.idUser}, {status: 'active'})
+      .then((result) => {
+        return res.status(200).json({success: true, message: 'user activé'})
+      }).catch((err) => {
+        return res.json({success: true, message: 'user non activé'})
+        
+      });
+    }),
+    
+    getOneUser: ((req, res, next)=>{
+       User.findOne({_id: req.params.idUser}).populate('role').exec()
+       .then((user) => {
+        return res.status(200).json({success: true, user: user})
+       }).catch((err) => {
+        return res.status(400).json({success: true, message: 'user not found'})     
+       });
+    }),
+
     listUser: ((req, res, next)=>{
       User.find().populate('role').exec()
       .then((result) => {
@@ -176,7 +229,24 @@ module.exports = {
         return res.status(400).json({error: err})
         
       });
-    })
+    }),
+
+    isFirstLogin: ((req, res, next)=>{
+      var email = req.body.email;
+    }),
 
 
+}
+
+
+ function genPwd (length) {
+  let result = '';
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const charactersLength = characters.length;
+  let counter = 0;
+  while (counter < length) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    counter += 1;
+  }
+  return result;
 }
