@@ -20,7 +20,8 @@ const produitSchema = mongoose.Schema({
         data: Buffer,
         contentType: String
       },
-    categoryName: {type: String}
+    categoryName: {type: String},
+    imageUrl: {type: String}
 })
 
 module.exports = mongoose.model('Produit', produitSchema)

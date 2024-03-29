@@ -14,11 +14,14 @@ var ticketRouter = require('./routes/ticket')
 const mongoose = require('mongoose')
 const multer = require('multer');
 const { log } = require('console');
+const bodyParser = require('body-parser');
+
 var app = express();
 
 // const upload = multer({
 //   limits: { fileSize: 10 * 1024 * 1024 * 1024} // Augmentez la taille selon vos besoins (ici, 10 Mo)
 // });
+
 
 const PATH = './uploads';
 let storage = multer.diskStorage({
@@ -35,6 +38,7 @@ let upload = multer({
 
 
 
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'twig');
@@ -46,6 +50,14 @@ app.use((req, res, next)=>{
   next();
 })
 
+app.use('/uploads', express.static('uploads'));
+
+// Configurer body-parser pour augmenter la limite de taille de la requête
+app.use(bodyParser.json({ limit: '500mb' }));
+app.use(bodyParser.urlencoded({ limit: '500mb', extended: true }));
+
+
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -54,20 +66,20 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 mongoose.set("strictQuery", false);
 
-// mongoose.connect(`mongodb+srv://aalijr97:${process.env.PASSWORD_DB}@cluster0.xhpqcnk.mongodb.net/?retryWrites=true&w=majority`).then(()=>{
-//   console.log('connexion DB reussi');
-// })
-// .catch((err)=>{
-//   console.log(err);
-//   console.log('connexion DB echoué');
-// });
-mongoose.connect('mongodb://127.0.0.1:27017/nouroulHijab').then(()=>{
+mongoose.connect(`mongodb+srv://aalijr97:${process.env.PASSWORD_DB}@cluster0.oepc2wf.mongodb.net/?retryWrites=true&w=majority`).then(()=>{
   console.log('connexion DB reussi');
 })
 .catch((err)=>{
   console.log(err);
   console.log('connexion DB echoué');
 });
+// mongoose.connect('mongodb://127.0.0.1:27017/nouroulHijab').then(()=>{
+//   console.log('connexion DB reussi');
+// })
+// .catch((err)=>{
+//   console.log(err);
+//   console.log('connexion DB echoué');
+// });
 
 
 app.use('/', indexRouter);

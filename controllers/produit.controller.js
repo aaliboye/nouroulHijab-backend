@@ -21,6 +21,7 @@ module.exports = {
     getOneProoduit: ((req, res, next)=>{
         
     }),
+    
 
     listProduitsByCategory: ((req, res, next)=>{
         var idCategory = req.params.idCategory;
@@ -36,71 +37,85 @@ module.exports = {
         })
     }),
 
+
+
     addProduit: ((req, res, next)=>{
-        // console.log(re.files[0].location);
-        // const imageUrl = req.file.path;
-        delete req.body._id
-
-        
-        const userName = ""
-        var categoryName= ""
-
-
-        const token = req.headers.authorization.split(' ')[1];
-        const decodedToken = jwt.verify(token, 'ASSANEALIKEY');
-        const userId = decodedToken.userId;
-
-
-        Produit.findOne({name: req.body.name})
-        .then((produit)=>{
-            if(!produit){
-                Category.findOne({_id: req.body.categoryId})
-                .then((category)=>{
-                    console.log(category);
-                    this.categoryName = category.name
-                    
-                    console.log(this.categoryName);
-                    var prod = new Produit({
-                        name: req.body.name,
-                        description: req.body.description,
-                        prixUnit: req.body.prixUnit,
-                        prixGros: req.body.prixGros,
-                        stock: req.body.stock,
-                        userId: userId,
-                        categoryId: req.body.categoryId,
-                        categoryName: this.categoryName,
-                        // imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+        console.log('add produit:');
+        try {
+            
+            // console.log(`-------add produit-------${req.body.toString()}`);
+            // console.log(req.body);
+            // // console.log(req.file);
+            // const imageUrl = req.file.path;
+            // delete req.body._id
+    
+            
+            const userName = ""
+            var categoryName= ""
+    
+    
+            const token = req.headers.authorization.split(' ')[1];
+            const decodedToken = jwt.verify(token, 'ASSANEALIKEY');
+            const userId = decodedToken.userId;
+    
+    
+            Produit.findOne({name: req.body.name})
+            .then((produit)=>{
+                if(!produit){
+                    Category.findOne({_id: req.body.categoryId})
+                    .then((category)=>{
+                        console.log(category);
+                        this.categoryName = category.name
                         
-                     })
-                     console.log(prod);
-                     prod.save()
-                     .then(()=>{
-                         res.status(200).json({success: true, message: 'vous avez ajouté un produit'})
-                     })
-                     .catch((err)=>{
+                        console.log(this.categoryName);
+                        var prod = new Produit({
+                            name: req.body.name,
+                            description: req.body.description,
+                            prixUnit: req.body.prixUnit,
+                            prixGros: req.body.prixGros,
+                            stock: req.body.stock,
+                            userId: userId,
+                            categoryId: req.body.categoryId,
+                            categoryName: this.categoryName,
+                            imageUrl: `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`?? ''
+                            // imageUrl: ''
+                            
+                         })
+                         console.log(prod);
+                         prod.save()
+                         .then(()=>{
+                             res.status(200).json({success: true, message: 'vous avez ajouté un produit'})
+                         })
+                         .catch((err)=>{
+                            console.log(err);
+                             res.status(400).json({success: false, message: err})
+                         })
+            
+                    })
+                    .catch((err)=>{
                         console.log(err);
-                         res.status(400).json({success: false, message: err})
-                     })
-        
-                })
-                .catch((err)=>{
-                    console.log(err);
-                    res.status(400).json({success: false,
-                    message: err})
-                }) 
-            }
-            else{
-                res.json({success: false, message: "produit existe deja"})
-            }
-        })
-
-        .catch((err)=>{
+                        res.status(400).json({success: false,
+                        message: err})
+                    }) 
+                }
+                else{
+                    res.json({success: false, message: "produit existe deja"})
+                }
+            })
+    
+            .catch((err)=>{
+                res.status(400).json({status: "echec",
+                message: err})
+            })
+        } catch (error) {
+            console.log(error);
             res.status(400).json({status: "echec",
-            message: err})
-        })
+                message: error})
+        }
 
     }),
 
+    
     updateProduit: ((req, res, next)=>{
         
     }),

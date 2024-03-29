@@ -119,6 +119,49 @@ module.exports = {
       });
   },
 
+  listVentebyDate: (req, res, next) => {
+    console.log("errr");
+    console.log(req.body);
+    const startDate = new Date(req.body.dateDebut);
+    const endDate = new Date(req.body.dateFin); // Les mois commencent à partir de 0 dans JavaScript
+    // console.log(currentMonth);
+
+    // // Obtenez la date de début du mois actuel
+    // const startOfMonth = new Date(currentYear, currentMonth - 1, 1);
+
+    // // Obtenez la date de début du mois suivant
+    // const startOfNextMonth = new Date(currentYear, currentMonth, 1);
+    console.log(startDate);
+    console.log(endDate);
+    try {
+      
+      Vente.find({
+        createdAt: {
+          $gte: startDate,
+          $lt: endDate,
+        },
+      })
+        .populate("user")
+        .exec((err, data) => {
+          console.log('data');
+          if (err) {
+            console.error(err);
+            return res.status(400).json({
+              success: false,
+              message: err,
+            });
+            // Gérer l'erreur
+          } else {
+            console.log(data);
+            return res.status(200).json(data);
+            // Traitez les données récupérées
+          }
+        });
+    } catch (error) {
+      console.log(error); 
+    }
+  },
+
   getVenteById: (req, res, next) => {
     const vente = Vente.findOne({ _id: req.params.idVente })
       .populate("user")

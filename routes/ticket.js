@@ -3,6 +3,7 @@ const router = express.Router()
 const ticketCtrl = require('../controllers/ticket.controller')
 
 router.get('/list-ventes', ticketCtrl.listVentes)
+router.post('/list-ventes-date', ticketCtrl.listVentebyDate)
 router.get('/list-ventes-today', ticketCtrl.listVenteToday)
 router.put('/evaluation/:productName', ticketCtrl.hideVentes)
 router.post('/valider-panier', ticketCtrl.validerPanier)
