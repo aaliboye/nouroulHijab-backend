@@ -77,8 +77,8 @@ module.exports = {
                             userId: userId,
                             categoryId: req.body.categoryId,
                             categoryName: this.categoryName,
-                            imageUrl: `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`?? ''
-                            // imageUrl: ''
+                            // imageUrl: `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`?? ''
+                            imageUrl: ''
                             
                          })
                          console.log(prod);

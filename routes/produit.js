@@ -32,7 +32,7 @@ const upload = multer({ storage: storage });
 
 
 router.get('/list-produit',auth, produitCtrl.listProduits);
-router.get('/list-produit/:idCategory', produitCtrl.listProduitsByCategory);
+router.get('/list-produit/:idCategory', auth, produitCtrl.listProduitsByCategory);
 
 
 

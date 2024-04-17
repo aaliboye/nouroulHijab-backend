@@ -143,8 +143,13 @@ module.exports = {
                   }
                   else{
 
+                    var dateActuelle = new Date();
+
+                  // Convertir la date en secondes
+                        var secondes = Math.floor(dateActuelle.getTime() / 1000);
+
                     var token =  jwt.sign(
-                      {...{ userId: user._id }, expiresIn: 24*60*60}, 
+                      {...{ userId: user._id, role: user.role._id }, expiresIn: 24*60*60, createdAt:secondes }, 
                       "ASSANEALIKEY"
                       );
                     var refreshToken =  jwt.sign(
