@@ -2,6 +2,7 @@ const User = require('../model/user.model')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const mailer = require('../providers/mailer')
+const { use } = require('../routes/users')
 
 
 module.exports = {
@@ -92,6 +93,31 @@ module.exports = {
 
     }),
 
+
+    
+    resetPassword: (async(req, res, next)=>{
+      console.log(`--------body---------${req.body.email}`);
+      let user = await User.findOne({email: req.body.email})
+      console.log(`--------user---------${user}`);
+
+      if(user){
+        var pwd = genPwd(8);
+        var pwdHash = await bcrypt.hash(pwd, 10)
+        const result = await User.updateOne({email: req.body.email}, {status: 'desactive', password: pwdHash})
+        console.log(`--------result---------${JSON.stringify(result)}`);
+        
+        if(result.modifiedCount == 1)
+          await mailer.sendMail(`pwd: ${pwd}`, req.body.email, "aalitestdev@gmail.com",res)
+        else
+          return res.json({success: false, message: 'user not found'})
+
+
+      }
+      else{
+        return res.json({success: false, message: 'user not found'})
+      }
+      
+    }),
 
     setPassword: (async(req, res, next)=>{
       var password = req.body.password;
