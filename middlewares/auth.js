@@ -17,6 +17,7 @@ module.exports = (req, res, next) => {
       console.log(`--------time to exp-------${decodedToken.createdAt+timeExp }`);
       console.log(`--------created At-------${decodedToken.createdAt}`);
       console.log(`--------role-------${decodedToken.role}`);
+      console.log(`--------USER-------${decodedToken.userId}`);
       
       console.log(`--------is expired-------${secondes>decodedToken.createdAt+timeExp }`);
       if(secondes>decodedToken.createdAt+timeExp ){

@@ -36,8 +36,8 @@ router.get('/list-produit/:idCategory', auth, produitCtrl.listProduitsByCategory
 
 
 
-router.post('/add-produit',  produitCtrl.addProduit);
-// router.post('/add-produit', upload.single('image'), produitCtrl.addProduit);
+// router.post('/add-produit',  produitCtrl.addProduit);
+router.post('/add-produit', auth, upload.single('image'), produitCtrl.addProduit);
 router.post('/sell-product', produitCtrl.vendreProduit)
 
 
