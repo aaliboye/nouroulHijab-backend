@@ -67,11 +67,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 mongoose.set("strictQuery", false);
 
 mongoose.connect(`mongodb+srv://aalijr97:${process.env.PASSWORD_DB}@cluster0.oepc2wf.mongodb.net/?retryWrites=true&w=majority`).then(()=>{
-  console.log('connexion DB reussi');
+  console.log('connexion DB cloud reussi');
 })
 .catch((err)=>{
   console.log(err);
-  console.log('connexion DB echoué');
+  console.log('connexion DB cloud echoué');
 });
 
 // mongoose.connect('mongodb://127.0.0.1:27017/nouroulHijab').then(()=>{
