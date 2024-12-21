@@ -192,6 +192,54 @@ module.exports = {
                     }
                 })
                 .catch(error => {
+                  console.log(`error------${error}`)
+                  res.status(500).json({success: false, message: err });
+                })
+            }
+          })
+          .catch(err => res.status(400).json({success: true, message: err }));
+    }),
+
+    logInWithTelephone: ((req, res, next)=>{
+      console.log(req.body);
+        User.findOne({ telephone : req.body.telephone }).populate('role').exec()
+          .then((user) => {
+            if (!user) {
+              res.status(400).json({success: false ,message: 'Utilisateur non trouvé !' });
+            }
+            else{
+              console.log('user');
+              console.log(user);
+              bcrypt.compare(req.body.password, user.password)
+                .then(valid => {
+                  if (!valid) {
+                    res.status(400).json({success: false ,message: 'Mot de passe incorrect !' });
+                  }
+                  else{
+
+                    var dateActuelle = new Date();
+
+                  // Convertir la date en secondes
+                        var secondes = Math.floor(dateActuelle.getTime() / 1000);
+
+                    var token =  jwt.sign(
+                      {...{ userId: user._id, role: user.role._id }, expiresIn: 24*60*60, createdAt:secondes }, 
+                      "ASSANEALIKEY"
+                      );
+                    var refreshToken =  jwt.sign(
+                      {...{ userId: user._id, role: user.role._id }, expiresIn: 30*24*60*60}, 
+                      "ASSANEALIKEY"
+                      );
+                      console.log(token)
+                      console.log(user)
+                      res.status(200).json({ 
+                        user: user,
+                        accessToken: token,
+                        refreshToken: refreshToken
+                      });
+                    }
+                })
+                .catch(error => {
                   console.log(error)
                   res.status(500).json({success: false, message: err });
                 })

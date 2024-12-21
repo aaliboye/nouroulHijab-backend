@@ -79,6 +79,14 @@ mongoose.connect(`mongodb+srv://aalijr97:${process.env.PASSWORD_DB}@cluster0.oep
 // })
 // .catch((err)=>{
 //   console.log(err);
+//   console.log('connexion DB cloud echoué');
+// });
+
+// mongoose.connect('mongodb://127.0.0.1:27017/nouroulHijab').then(()=>{
+//   console.log('connexion DB reussi');
+// })
+// .catch((err)=>{
+//   console.log(err);
 //   console.log('connexion DB echoué');
 // });
 
