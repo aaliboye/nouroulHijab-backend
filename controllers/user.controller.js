@@ -152,17 +152,19 @@ module.exports = {
       }
     }),
 
-    logIn: ((req, res, next)=>{
+    logIn: ( (req, res, next)=>{
       console.log(req.body);
         User.findOne({ email: req.body.email }).populate('role').exec()
-          .then((user) => {
+          .then(async (user) => {
             if (!user) {
               res.status(400).json({success: false ,message: 'Utilisateur non trouvé !' });
             }
             else{
               console.log('user');
               console.log(user);
-              console.log("compare  "+bcrypt.compare(req.body.password, user.password));
+              var pwdHash = await bcrypt.hash(pwd, 10)
+
+              console.log("compare  "+pwdHash+' '+user.password);
               
               bcrypt.compare(req.body.password, user.password)
                 .then(valid => {
