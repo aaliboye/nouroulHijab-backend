@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const mailer = require('../providers/mailer')
 const { use } = require('../routes/users')
+const { log } = require('debug/src/browser')
 
 
 module.exports = {
@@ -51,6 +52,7 @@ module.exports = {
 
     }),
 
+    /*
     addUser: (async (req, res, next)=>{
       let user = new User({
         ...req.body
@@ -66,6 +68,8 @@ module.exports = {
         let saveUser = await user.save()
   
         if(saveUser){
+          // console.log('pwd---'+saveUser.password);
+          
           
           await mailer.sendMail(`pwd: ${pwd}`, req.body.email, "aalitestdev@gmail.com",res)
   
@@ -81,6 +85,8 @@ module.exports = {
           return res.json({success: false, message: 'user not saved'})
         }
         } catch (error) {
+          console.log('errorr--------'+error);
+          
           return res.json({success: false, message: 'user not saved'})
           
         }
@@ -92,6 +98,32 @@ module.exports = {
       }
 
     }),
+    */
+
+    addUser: async (req, res, next) => {
+      let user = new User({ ...req.body });
+      let pwd = genPwd(8); // Generate random password
+      console.log(`Generated password: ${pwd}`);
+      
+      try {
+        let pwdHash = await bcrypt.hash(pwd, 10);
+        console.log(`Password Hash: ${pwdHash}`);
+        user.password = pwdHash;
+        
+        let saveUser = await user.save();
+        if (saveUser) {
+          console.log(`Saved user: ${saveUser}`);
+          await mailer.sendMail(`pwd: ${pwd}`, req.body.email, "aalitestdev@gmail.com", res);
+          return res.status(200).json({ success: true, message: "User created and mail sent." });
+        } else {
+          return res.status(400).json({ success: false, message: "User not saved." });
+        }
+      } catch (error) {
+        console.error("Error saving user:", error);
+        return res.status(500).json({ success: false, message: "An error occurred." });
+      }
+    },
+    
 
 
     
@@ -162,17 +194,20 @@ module.exports = {
             else{
               console.log('user');
               console.log(user);
-              var pwdHash = await bcrypt.hash(pwd, 10)
-
-              console.log("compare  "+pwdHash+' '+user.password);
+              
+              
               
               bcrypt.compare(req.body.password, user.password)
                 .then(valid => {
                   if (!valid) {
+                    console.log('validd------'+valid);
+                    
                     res.status(400).json({success: false ,message: 'Mot de passe incorrect !' });
                   }
                   else{
 
+                    console.log('valid------'+valid);
+                    
                     var dateActuelle = new Date();
 
                   // Convertir la date en secondes
