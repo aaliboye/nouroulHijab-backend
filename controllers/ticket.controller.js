@@ -189,6 +189,11 @@ module.exports = {
       user: userId,
       prixTotal: req.body.prix,
       createdAt: Date.now(),
+      moyenPaiement: req.body.moyenPaiement,
+      prixPaye: req.body.prixPaye,
+      modePaiement: req.body.modePaiement,
+      nomClient:req.body.nomClient,
+      numeroClient:req.body.numeroClient,
       status: "initiated",
     });
 

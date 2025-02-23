@@ -1,0 +1,31 @@
+[debug] [2025-02-23T03:27:28.534Z] ----------------------------------------------------------------------
+[debug] [2025-02-23T03:27:28.536Z] Command:       C:\Program Files\nodejs\node.exe C:\Program Files\nodejs\node_modules\firebase-tools\lib\bin\firebase.js deploy --only functions --debug
+[debug] [2025-02-23T03:27:28.536Z] CLI Version:   13.31.2
+[debug] [2025-02-23T03:27:28.536Z] Platform:      win32
+[debug] [2025-02-23T03:27:28.537Z] Node Version:  v18.20.4
+[debug] [2025-02-23T03:27:28.537Z] Time:          Sun Feb 23 2025 03:27:28 GMT+0000 (temps universel coordonné)
+[debug] [2025-02-23T03:27:28.537Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-02-23T03:27:28.717Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-02-23T03:27:28.719Z] > authorizing via signed-in user (aalijr97@gmail.com)
+[debug] [2025-02-23T03:27:28.719Z] [iam] checking project nouroul-hijab-backend for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]
+[debug] [2025-02-23T03:27:28.720Z] Checked if tokens are valid: true, expires at: 1740284379625
+[debug] [2025-02-23T03:27:28.721Z] Checked if tokens are valid: true, expires at: 1740284379625
+[debug] [2025-02-23T03:27:28.722Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/nouroul-hijab-backend:testIamPermissions [none]
+[debug] [2025-02-23T03:27:28.722Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/nouroul-hijab-backend:testIamPermissions x-goog-quota-user=projects/nouroul-hijab-backend
+[debug] [2025-02-23T03:27:28.724Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/nouroul-hijab-backend:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]}
+[debug] [2025-02-23T03:27:30.096Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/nouroul-hijab-backend:testIamPermissions 200
+[debug] [2025-02-23T03:27:30.097Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/nouroul-hijab-backend:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]}
+[debug] [2025-02-23T03:27:30.097Z] Checked if tokens are valid: true, expires at: 1740284379625
+[debug] [2025-02-23T03:27:30.097Z] Checked if tokens are valid: true, expires at: 1740284379625
+[debug] [2025-02-23T03:27:30.098Z] >>> [apiv2][query] POST https://iam.googleapis.com/v1/projects/nouroul-hijab-backend/serviceAccounts/nouroul-hijab-backend@appspot.gserviceaccount.com:testIamPermissions [none]
+[debug] [2025-02-23T03:27:30.098Z] >>> [apiv2][body] POST https://iam.googleapis.com/v1/projects/nouroul-hijab-backend/serviceAccounts/nouroul-hijab-backend@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2025-02-23T03:27:31.198Z] <<< [apiv2][status] POST https://iam.googleapis.com/v1/projects/nouroul-hijab-backend/serviceAccounts/nouroul-hijab-backend@appspot.gserviceaccount.com:testIamPermissions 200
+[debug] [2025-02-23T03:27:31.198Z] <<< [apiv2][body] POST https://iam.googleapis.com/v1/projects/nouroul-hijab-backend/serviceAccounts/nouroul-hijab-backend@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[info] 
+[info] === Deploying to 'nouroul-hijab-backend'...
+[info] 
+[info] i  deploying functions 
+[info] Running command: npm --prefix "$RESOURCE_DIR" run lint
+[error] 
+[error] Error: functions predeploy error: Command terminated with non-zero exit code 1

@@ -194,8 +194,7 @@ module.exports = {
             else{
               console.log('user');
               console.log(user);
-              
-              
+
               
               bcrypt.compare(req.body.password, user.password)
                 .then(valid => {
